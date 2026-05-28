@@ -42,6 +42,7 @@ public class AuthServiceImpl implements AuthService {
         return user.getId();
     }
 
+    @Override
     public TokenResponseDto login(AuthRequest authRequest){
         User user = authRepository.findByLogin(authRequest.login()).orElseThrow(
                 () -> new AuthenticationException("User with this login: " + authRequest.login() + " is not registered")
@@ -58,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
 
         return new TokenResponseDto(accessToken,refreshToken);
     }
+
 
     public TokenValidResponseDto validate(String token){
 
