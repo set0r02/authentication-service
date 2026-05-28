@@ -1,6 +1,6 @@
 package com.innowise.authenticationservice.mapper;
 
-import com.innowise.authenticationservice.dto.AuthRequest;
+import com.innowise.authenticationservice.dto.request.AuthRequest;
 import com.innowise.authenticationservice.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

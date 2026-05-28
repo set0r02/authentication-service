@@ -1,6 +1,6 @@
 package com.innowise.authenticationservice.controller;
 
-import com.innowise.authenticationservice.dto.AuthRequest;
+import com.innowise.authenticationservice.dto.request.AuthRequest;
 import com.innowise.authenticationservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

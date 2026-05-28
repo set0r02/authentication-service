@@ -2,7 +2,6 @@ spring:
   application:
     name: authenticationservice
 
-
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -24,3 +23,8 @@ spring:
 
   logging:
     level: INFO
+
+jwt:
+  secret: 8f4c7a1d9b2e5f6a8c3d7e1f9a2b4c6d
+  access-expiration-ms: 900000
+  refresh-expiration-ms: 604800000

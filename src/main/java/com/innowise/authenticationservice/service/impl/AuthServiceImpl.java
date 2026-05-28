@@ -1,7 +1,7 @@
 package com.innowise.authenticationservice.service.impl;
 
-import com.innowise.authenticationservice.dto.AuthRequest;
-import com.innowise.authenticationservice.exception.EntityNotFoundException;
+import com.innowise.authenticationservice.dto.request.AuthRequest;
+import com.innowise.authenticationservice.exception.AutheticationException;
 import com.innowise.authenticationservice.exception.WrongDataException;
 import com.innowise.authenticationservice.mapper.AuthMapper;
 import com.innowise.authenticationservice.model.Role;
@@ -24,17 +24,19 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Long register(AuthRequest authRequest) {
+        if(authRepository.findByLogin(authRequest.login()).isPresent()){
+            throw new AutheticationException("This " + authRequest.login() + " is already used");
+        }
         User user = authMapper.toEntity(authRequest);
         user.setPassword(passwordEncoder.encode(authRequest.password()));
         user.setRole(Role.USER);
-
         authRepository.save(user);
         return user.getId();
     }
 
     public void login(AuthRequest authRequest){
         User user = authRepository.findByLogin(authRequest.login()).orElseThrow(
-                () -> new EntityNotFoundException(authRequest.login())
+                () -> new AutheticationException("User with this login: " + authRequest.login() + " is not registered")
         );
 
         if(!passwordEncoder.matches(authRequest.password(),user.getPassword())){

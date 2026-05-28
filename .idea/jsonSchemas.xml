@@ -14,6 +14,9 @@
                   <Item>
                     <option name="path" value="src/main/resources/changelog/changeset/001-init-database.yaml" />
                   </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/changelog/db.changelog-master.yaml" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
