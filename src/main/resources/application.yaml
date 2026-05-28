@@ -1,30 +1,30 @@
-spring:
-  application:
-    name: authenticationservice
+  spring:
+    application:
+      name: authenticationservice
 
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    datasource:
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
+      driver-class-name: org.postgresql.Driver
 
-  liquibase:
-    change-log-path: classpath:changelog/db.changelog-master.yaml
-    enabled: true
+    liquibase:
+      change-log-path: classpath:changelog/db.changelog-master.yaml
+      enabled: true
 
 
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: false
-    properties:
+    jpa:
       hibernate:
-        format_sql: false
+        ddl-auto: none
+      show-sql: false
+      properties:
+        hibernate:
+          format_sql: false
 
-  logging:
-    level: INFO
+    logging:
+      level: INFO
 
-jwt:
-  secret: 8f4c7a1d9b2e5f6a8c3d7e1f9a2b4c6d
-  access-token-expiration: 900000
-  refresh-token-expiration: 604800000
+  jwt:
+    secret: 8f4c7a1d9b2e5f6a8c3d7e1f9a2b4c6d
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
