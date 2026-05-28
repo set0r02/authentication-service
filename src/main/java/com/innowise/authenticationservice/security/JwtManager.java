@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class JwtManager {
@@ -25,7 +26,7 @@ public class JwtManager {
     }
 
 
-    public String generateJwtToken(Long id, String role){
+    public String generateAccessToken(Long id, String role){
         return Jwts.builder()
                 .subject(id.toString())
                 .claim("role",role)
@@ -44,12 +45,12 @@ public class JwtManager {
                 .compact();
     }
 
-    public Claims validateToken(String token){
-        return Jwts.parser()
+    public Optional<Claims> validateToken(String token){
+        return Optional.of(Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
+                .getPayload());
     }
 
 
