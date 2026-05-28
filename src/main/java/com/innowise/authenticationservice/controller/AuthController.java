@@ -20,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<Void> register(@Valid @RequestBody AuthRequest authRequest){
         authService.register(authRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -31,12 +31,12 @@ public class AuthController {
     }
 
     @PostMapping("validate")
-    public ResponseEntity<TokenValidResponseDto> validate(@RequestBody TokenRequest tokenRequest){
+    public ResponseEntity<TokenValidResponseDto> validate(@Valid @RequestBody TokenRequest tokenRequest){
         return ResponseEntity.ok(authService.validate(tokenRequest.token()));
     }
 
     @PostMapping("refresh")
-    public ResponseEntity<TokenResponseDto> refresh(@RequestBody TokenRequest tokenRequest){
+    public ResponseEntity<TokenResponseDto> refresh(@Valid @RequestBody TokenRequest tokenRequest){
         return ResponseEntity.ok(authService.refresh(tokenRequest.token()));
     }
 

@@ -4,7 +4,6 @@ import com.innowise.authenticationservice.dto.request.AuthRequest;
 import com.innowise.authenticationservice.dto.response.TokenResponseDto;
 import com.innowise.authenticationservice.dto.response.TokenValidResponseDto;
 import com.innowise.authenticationservice.exception.AuthenticationException;
-import com.innowise.authenticationservice.exception.WrongDataException;
 import com.innowise.authenticationservice.mapper.AuthMapper;
 import com.innowise.authenticationservice.model.Role;
 import com.innowise.authenticationservice.model.User;
@@ -42,7 +41,6 @@ public class AuthServiceImpl implements AuthService {
         return user.getId();
     }
 
-    @Override
     public TokenResponseDto login(AuthRequest authRequest){
         User user = authRepository.findByLogin(authRequest.login()).orElseThrow(
                 () -> new AuthenticationException("User with this login: " + authRequest.login() + " is not registered")
@@ -60,31 +58,30 @@ public class AuthServiceImpl implements AuthService {
         return new TokenResponseDto(accessToken,refreshToken);
     }
 
-
     public TokenValidResponseDto validate(String token){
-
-        return jwtManager.validateToken(token)
-                .map(claims -> new TokenValidResponseDto(
-                        true,
-                        Long.parseLong(claims.getSubject()),
-                        claims.get("role",String.class)
-                )).orElseGet(() -> new TokenValidResponseDto(false, null, null)
-                );
+        try{
+            Claims claims = jwtManager.validateToken(token);
+            return new TokenValidResponseDto(
+                    true,
+                    Long.valueOf(claims.getSubject()),
+                    claims.get("role",String.class)
+            );
+        }catch (Exception exception){
+            return new TokenValidResponseDto(false,null,null);
+        }
     }
 
     public TokenResponseDto refresh(String token){
+        Claims claims = jwtManager.validateToken(token);
+        Long id = Long.valueOf(claims.getSubject());
 
-        return jwtManager.validateToken(token)
-                .map(claims -> {
-                    Long id = Long.valueOf(claims.getSubject());
-                    String role = claims.get("role",String.class);
+        User user = authRepository.findById(id).orElseThrow(
+                () -> new AuthenticationException("User not found")
+        );
+        String accessTokenRefreshed = jwtManager.generateAccessToken(id,user.getRole().getAuthority());
+        String refreshTokenRefreshed = jwtManager.generateRefreshToken(id);
+        return new TokenResponseDto(accessTokenRefreshed,refreshTokenRefreshed);
 
-                    String accessTokenNew = jwtManager.generateAccessToken(id,role);
-                    String refreshTokenNew = jwtManager.generateRefreshToken(id);
-                    return new TokenResponseDto(accessTokenNew,refreshTokenNew);
-                }).orElseThrow(
-                        () -> new AuthenticationException("Invalid or expired token")
-                );
     }
 
 }

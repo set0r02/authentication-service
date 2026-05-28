@@ -45,12 +45,12 @@ public class JwtManager {
                 .compact();
     }
 
-    public Optional<Claims> validateToken(String token){
-        return Optional.of(Jwts.parser()
+    public Claims validateToken(String token){
+        return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload());
+                .getPayload();
     }
 
 
