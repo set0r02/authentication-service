@@ -29,7 +29,12 @@ public class SecurityConfiguration {
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**")
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/validate",
+                                "/api/auth/refresh")
                         .permitAll()
                         .requestMatchers("/admin/**")
                         .hasAuthority(Role.ROLE_ADMIN.getAuthority())
