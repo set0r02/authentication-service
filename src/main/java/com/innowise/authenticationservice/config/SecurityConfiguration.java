@@ -36,10 +36,6 @@ public class SecurityConfiguration {
                                 "/api/auth/validate",
                                 "/api/auth/refresh")
                         .permitAll()
-                        .requestMatchers("/admin/**")
-                        .hasAuthority(Role.ROLE_ADMIN.getAuthority())
-                        .requestMatchers("/user/**")
-                        .hasAnyAuthority(Role.ROLE_ADMIN.getAuthority(),Role.ROLE_USER.getAuthority())
                         .anyRequest()
                         .authenticated()
                 )
