@@ -1,7 +1,7 @@
 package com.innowise.authenticationservice.mapper;
 
-import com.innowise.authenticationservice.dto.request.AuthRequest;
-import com.innowise.authenticationservice.model.User;
+import com.innowise.authenticationservice.dto.request.RegisterRequest;
+import com.innowise.authenticationservice.model.AuthUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,6 +10,6 @@ public interface AuthMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
-    User toEntity(AuthRequest authRequest);
+    AuthUser toEntity(RegisterRequest registerRequest);
 
 }

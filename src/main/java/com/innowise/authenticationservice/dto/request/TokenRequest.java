@@ -1,6 +1,4 @@
 package com.innowise.authenticationservice.dto.request;
 
-public record TokenRequest(
-        String token
-) {
+public record TokenRequest(String token) {
 }

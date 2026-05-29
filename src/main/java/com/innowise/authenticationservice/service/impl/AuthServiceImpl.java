@@ -1,12 +1,13 @@
 package com.innowise.authenticationservice.service.impl;
 
-import com.innowise.authenticationservice.dto.request.AuthRequest;
+import com.innowise.authenticationservice.dto.request.LoginRequest;
+import com.innowise.authenticationservice.dto.request.RegisterRequest;
 import com.innowise.authenticationservice.dto.response.TokenResponseDto;
 import com.innowise.authenticationservice.dto.response.TokenValidResponseDto;
 import com.innowise.authenticationservice.exception.AuthenticationException;
 import com.innowise.authenticationservice.mapper.AuthMapper;
 import com.innowise.authenticationservice.model.Role;
-import com.innowise.authenticationservice.model.User;
+import com.innowise.authenticationservice.model.AuthUser;
 import com.innowise.authenticationservice.repository.AuthRepository;
 import com.innowise.authenticationservice.security.JwtManager;
 import com.innowise.authenticationservice.service.AuthService;
@@ -15,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,31 +28,32 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Long register(AuthRequest authRequest) {
-        if(authRepository.findByLogin(authRequest.login()).isPresent()){
-            throw new AuthenticationException("This " + authRequest.login() + " is already used");
+    public Long register(RegisterRequest registerRequest) {
+        if(authRepository.findByLogin(registerRequest.login()).isPresent()){
+            throw new AuthenticationException("This " + registerRequest.login() + " is already used");
         }
-        User user = authMapper.toEntity(authRequest);
-        user.setPassword(passwordEncoder.encode(authRequest.password()));
-        user.setRole(Role.ROLE_USER);
 
-        authRepository.save(user);
-        return user.getId();
+        AuthUser authUser = authMapper.toEntity(registerRequest);
+        authUser.setPassword(passwordEncoder.encode(registerRequest.password()));
+        authUser.setRole(Role.ROLE_USER);
+
+        authRepository.save(authUser);
+        return authUser.getId();
     }
 
-    public TokenResponseDto login(AuthRequest authRequest){
-        User user = authRepository.findByLogin(authRequest.login()).orElseThrow(
-                () -> new AuthenticationException("User with this login: " + authRequest.login() + " is not registered")
+    public TokenResponseDto login(LoginRequest loginRequest){
+        AuthUser authUser = authRepository.findByLogin(loginRequest.login()).orElseThrow(
+                () -> new AuthenticationException("User with this login: " + loginRequest.login() + " is not registered")
         );
 
-        if(!passwordEncoder.matches(authRequest.password(),user.getPassword())){
+        if(!passwordEncoder.matches(loginRequest.password(), authUser.getPassword())){
             throw new AuthenticationException("Password is wrong");
         }
 
         String accessToken = jwtManager.generateAccessToken(
-                user.getId(),user.getRole().getAuthority());
+                authUser.getId(), authUser.getRole().getAuthority());
         String refreshToken = jwtManager.generateRefreshToken(
-                user.getId());
+                authUser.getId());
 
         return new TokenResponseDto(accessToken,refreshToken);
     }
@@ -75,10 +75,10 @@ public class AuthServiceImpl implements AuthService {
         Claims claims = jwtManager.validateToken(token);
         Long id = Long.valueOf(claims.getSubject());
 
-        User user = authRepository.findById(id).orElseThrow(
+        AuthUser authUser = authRepository.findById(id).orElseThrow(
                 () -> new AuthenticationException("User not found")
         );
-        String accessTokenRefreshed = jwtManager.generateAccessToken(id,user.getRole().getAuthority());
+        String accessTokenRefreshed = jwtManager.generateAccessToken(id, authUser.getRole().getAuthority());
         String refreshTokenRefreshed = jwtManager.generateRefreshToken(id);
         return new TokenResponseDto(accessTokenRefreshed,refreshTokenRefreshed);
 
