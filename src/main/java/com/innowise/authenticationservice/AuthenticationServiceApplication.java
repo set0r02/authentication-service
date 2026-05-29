@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @ConfigurationPropertiesScan
 @SpringBootApplication
+@EnableFeignClients
 public class AuthenticationServiceApplication {
     static void main(String[] args) {
         SpringApplication.run(AuthenticationServiceApplication.class,args);

@@ -84,4 +84,16 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    public void saveUserCredentials(RegisterRequest registerRequest){
+        if(authRepository.existsAuthUserByLogin(registerRequest.login())){
+            throw new AuthenticationException("User with this login: " + registerRequest.login() +" not found");
+        }
+        AuthUser authUser = AuthUser.builder()
+                .login(registerRequest.login())
+                .password(passwordEncoder.encode(registerRequest.password()))
+                .build();
+
+        authRepository.save(authUser);
+    }
+
 }

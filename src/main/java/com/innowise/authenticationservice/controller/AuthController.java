@@ -33,14 +33,19 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
-    @PostMapping("validate")
+    @PostMapping("/validate")
     public ResponseEntity<TokenValidResponseDto> validate(@Valid @RequestBody TokenRequest tokenRequest){
         return ResponseEntity.ok(authService.validate(tokenRequest.token()));
     }
 
-    @PostMapping("refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<TokenResponseDto> refresh(@Valid @RequestBody TokenRequest tokenRequest){
         return ResponseEntity.ok(authService.refresh(tokenRequest.token()));
+    }
+
+    @PostMapping("/credentials")
+    public ResponseEntity<Void> saveUserCredentials(@Valid @RequestBody RegisterRequest registerRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
