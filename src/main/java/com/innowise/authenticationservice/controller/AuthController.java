@@ -45,6 +45,7 @@ public class AuthController {
 
     @PostMapping("/credentials")
     public ResponseEntity<Void> saveUserCredentials(@Valid @RequestBody RegisterRequest registerRequest){
+        authService.saveUserCredentials(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

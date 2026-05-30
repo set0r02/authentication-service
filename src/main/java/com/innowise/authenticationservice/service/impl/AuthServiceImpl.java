@@ -28,6 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public Long register(RegisterRequest registerRequest) {
         if(authRepository.findByLogin(registerRequest.login()).isPresent()){
             throw new AuthenticationException("This " + registerRequest.login() + " is already used");
@@ -84,6 +85,7 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    @Transactional
     public void saveUserCredentials(RegisterRequest registerRequest){
         if(authRepository.existsAuthUserByLogin(registerRequest.login())){
             throw new AuthenticationException("User with this login: " + registerRequest.login() +" not found");

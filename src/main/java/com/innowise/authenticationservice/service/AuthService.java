@@ -15,4 +15,6 @@ public interface AuthService {
     TokenValidResponseDto validate(String token);
 
     TokenResponseDto refresh(String token);
+
+    void saveUserCredentials(RegisterRequest registerRequest);
 }
