@@ -36,7 +36,6 @@ public class SecurityConfiguration {
                 .addFilterBefore(
                         jwtTokenFilter,
                         UsernamePasswordAuthenticationFilter.class);
-        ;
         return httpSecurity.build();
     }
 
