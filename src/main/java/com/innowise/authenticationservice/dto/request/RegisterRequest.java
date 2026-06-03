@@ -22,7 +22,7 @@ public record RegisterRequest(
         @Size(min = 1, max = 255, message = "Surname should be between {min} and {max} characters")
         String surname,
 
-        @NotBlank(message = "Birth date should not be blank")
+        @NotNull(message = "Birth date should not be blank")
         @Past(message = "Birth date should be in the past")
         LocalDate birthDate,
 
