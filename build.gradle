@@ -5,7 +5,7 @@ plugins {
     id 'io.freefair.lombok' version '9.2.0'
 }
 
-group = 'org.example'
+group = 'com.innowise'
 version = '1.0-SNAPSHOT'
 
 repositories {

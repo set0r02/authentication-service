@@ -17,19 +17,16 @@ public class AdminSeeder implements ApplicationRunner {
     private final AuthRepository authRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.admin.login}")
+    @Value("${admin.login}")
     private String adminLogin;
 
-    @Value("${app.admin.password}")
+    @Value("${admin.password}")
     private String adminPassword;
 
     @Override
     public void run(ApplicationArguments args){
-        boolean adminExists = authRepository.findAll()
-                .stream()
-                .anyMatch(u -> u.getRole() == Role.ROLE_ADMIN);
 
-        if (!adminExists) {
+        if (!authRepository.existsByRole(Role.ROLE_ADMIN)) {
             AuthUser admin = new AuthUser();
             admin.setLogin(adminLogin);
             admin.setPassword(passwordEncoder.encode(adminPassword));
