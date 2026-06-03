@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 public class AuthenticationServiceApplication {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(AuthenticationServiceApplication.class,args);
     }
 }

@@ -30,6 +30,7 @@ public class JwtManager {
                 .claim("role",role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration()))
+                .claim("tokenType", "access")
                 .signWith(secretKey)
                 .compact();
     }
@@ -39,6 +40,7 @@ public class JwtManager {
                 .subject(id.toString())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration()))
+                .claim("tokenType", "refresh")
                 .signWith(secretKey)
                 .compact();
     }

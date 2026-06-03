@@ -23,7 +23,8 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - DB_USERNAME=${DB_USERNAME:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_URL=${DB_URL}
+      - DB_URL=${DB_URL:-jdbc:postgresql://auth-db:5432/auth_db}
+      - JWT_SECRET=${JWT_SECRET:-local-dev-secret}
     depends_on:
       auth-db:
         condition: service_healthy
