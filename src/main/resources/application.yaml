@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: authenticationservice
+
+  service:
+    user-service:
+      url: http://localhost:8081
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:changelog/db.changelog-master.yaml
+    enabled: true
+
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
+
+
+
+logging:
+  level:
+    root: INFO
+
+admin:
+  login: ${ADMIN_LOGIN:admin}
+  password: ${ADMIN_PASSWORD:change_me}
